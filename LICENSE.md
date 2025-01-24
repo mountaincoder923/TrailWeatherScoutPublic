@@ -9,6 +9,7 @@ You are permitted to copy, modify, and use the code for personal or educational 
 You may run the code on your local machine or any personal system.
 
 **2.	Restrictions:**
+
     Redistribution:
     You are not allowed to distribute, share, or otherwise make this code available to others, in whole or in part, outside of this repository.
 
