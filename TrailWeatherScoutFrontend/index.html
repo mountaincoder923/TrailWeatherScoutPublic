@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Hiking Trail Weather</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, darkblue, lightblue, pink, orange, darkorange);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        .container {
+            background: white;
+            background-color: rgba(255, 255, 255, 0.90);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            margin: 50px auto;
+            text-align: center;
+            position: relative;
+        }
+        h1 {
+            color: #333;
+        }
+        .description {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            width: 80%;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            display: block;
+            margin: 10px auto;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .trail-list {
+            list-style: none;
+            padding: 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .trail-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            margin: 8px 0;
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 18px;
+            flex-wrap: wrap;
+            opacity: 1;
+        }
+        .trail-text {
+            text-align: center;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            width: 100%;
+        }
+        .custom-marker {
+            font-style: italic;
+            color: blue;
+            font-size: 14px;
+            margin-left: 5px;
+        }
+        .remove-btn {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-85%);
+            background: rgba(237, 72, 72, 0.92);
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .remove-btn:hover {
+            background: darkred;
+        }
+        #bestTrailContainer {
+            display: none;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        #findBestTrail {
+            background: #007bff;
+            width: 85%;
+            font-size: 18px;
+        }
+        #findBestTrail:hover {
+            background: #0056b3;
+        }
+        .manual-entry {
+            font-size: 14px;
+            color: #007bff;
+            text-decoration: underline;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .manual-box {
+            display: none;
+            margin-top: 10px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        #findBestTrail {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            padding: 10px 20px;
+            font-size: 18px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #findBestTrail:disabled {
+            background-color: #5a99d4;
+            cursor: not-allowed;
+        }
+        .spinner {
+            display: flex;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+        }
+        .inline-spinner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .small-input {
+            width: 45%;
+            margin: 5px;
+        }
+        .tech-details {
+            font-size: 14px;
+            color: #007bff;
+            text-decoration: underline;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 15px;
+        }
+        .tech-box {
+            display: none;
+            margin-top: 10px;
+            padding: 15px;
+            background: #f1f1f1;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            font-size: 14px;
+        }
+        .date-label {
+            display: block;
+            color: #333;
+            font-size: 14px;
+            margin-top: 15px;
+            text-align: left;
+            width: 80%;
+            margin: 10px auto 0;
+        }
+        .weather-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .weather-condition {
+            background: rgba(248, 249, 250, 0.85);
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .unitsToggle {
+            font-size: 14px;
+            color: #001fc1;
+            text-decoration: underline;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 15px;
+        }
+        .weather-condition span:first-child {
+            font-weight: bold;
+            color: #333;
+        }
+        .weather-condition span:last-child {
+            color: #555;
+        }
+        #weatherDataStatus {
+            position: fixed;
+            display: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 0;
+            font-size: 14px;
+            text-align: center;
+            color: white;
+            background-color: #4CAF50;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        @media (max-width: 600px) {
+            .container {
+                margin: 20px auto;
+                width: 90%;
+                padding: 10px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .trail-item {
+                font-size: 16px;
+            }
+            .manual-box, .tech-box {
+                font-size: 0.9rem;
+            }
+            .weather-condition {
+                font-size: 0.9rem;
+            }
+            .unitsToggle, .tech-details {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="weatherDataStatus"></div>
+
+<div class="container">
+    <h1>🏔️ TrailWeatherScout 🏕️</h1>
+    <p class="description" style="color: #333333;">
+        <strong>Welcome!</strong>
+        TrailWeatherScout can automatically compare local, granular weather for up to 15 locations in the US for any day in the next week.
+        We’ll find the spot with the clearest sky and the lowest chance of rain for your adventure 😊. Source code available in technical details.
+        <br/><br/>
+
+        <span id="toggleButton" style="cursor: pointer; color: #007bff; text-decoration: underline;">Click for instructions</span>
+    <div id="instructions" style="display: none; margin-top: 10px;">
+        <div style="margin-left: 0; padding-left: 0; color: #333333;">
+            <strong>Instructions:</strong>
+            <ul style="list-style-position: inside; text-align: left; font-size: 0.9em; margin-left: 0;">
+                <li>Enter up to 15 locations.</li>
+                <li>Use the "Enter Trail Name" box automatically add. Search can find most trailheads even less known ones.</li>
+                <li>If it is on Google Maps, you can find it here automatically too. If not, see the next line for manual entry.</li>
+                <li>Click on "Insert Manually" to enter coordinates (up to 4 decimals of precision) if search cannot find it.</li>
+            </ul>
+        </div>
+        <strong style="font-size: 0.85em; color: #333333;">Note:</strong>
+        <span style="font-size: 0.85em; color: #333333;">
+            Weather reports are specific to within about 3 square kilometers of entered locations.
+            We compare based on cloudiness and chance of precipitation (less is better).
+            As expected, the further out you're searching, the less accurate it'll be.
+        </span>
+    </div>
+    </p>
+
+    <div style="background-color: #fff3cd; color: #856404; padding: 5px; border: 1px solid #ffeeba; border-radius: 3px; text-align: center; font-size: 12px; margin-bottom: 15px;">
+        <strong>Disclaimer:</strong> TrailWeatherScout is for informational purposes only. We are not responsible for
+        any damages, injuries, or inconveniences resulting from inaccurate weather forecasts or trail information.
+        Always prepare appropriately for your hike.
+    </div>
+
+    <label for="trailName"></label><input type="text" id="trailName" placeholder="Enter trail name"/>
+
+    <label for="forecastDate" class="date-label">Choose Date: (within 7 days):</label>
+    <input type="date" id="forecastDate"/>
+
+    <p class="manual-entry" onclick="toggleManualEntry()">Insert Manually by Coordinate</p>
+    <div class="manual-box" id="manualBox">
+        <label for="manualLatitude"></label><input type="text" class="small-input" id="manualLatitude" placeholder="Latitude (+- format)"/>
+        <label for="manualLongitude"></label><input type="text" class="small-input" id="manualLongitude" placeholder="Longitude (+- format)"/>
+        <label for="trailManualName"></label><input
+            type="text"
+            class="small-input"
+            id="trailManualName"
+            placeholder="Trail Name (15 Character Limit)"/>
+        <button id="addCoordinates">➕ Add Coordinates</button>
+    </div>
+
+    <ul class="trail-list" id="trailList"></ul>
+
+    <button id="findBestTrail">
+        <span id="buttonText">🌟 Find Best Trail 🌟</span>
+        <div id="loadingSpinner" style="display: none;" class="inline-spinner">
+            <div class="spinner"></div>
+        </div>
+    </button>
+
+    <div id="bestTrailContainer" class="container">
+        <h2>🏆 Best Trail Recommendation</h2>
+        <div class="header" id="bestTrailHeader">
+            <h1 id="bestTrailTitle">[Trail Name]</h1>
+        </div>
+        <div class="content">
+            <h2>Weather Forecast</h2>
+            <div class="weather-info">
+                <div class="weather-condition">
+                    <span>Skycover (Cloudiness):</span>
+                    <span id="bestTrailSkycover">[Skycover]</span>
+                </div>
+                <div class="weather-condition">
+                    <span>Temperature 🌡:</span>
+                    <span id="bestTrailTemperature">[Temperature]</span>
+                </div>
+                <div class="weather-condition">
+                    <span>Feels Like 🌡 (Factors humidity and wind):</span>
+                    <span id="bestTrailFeelsLike">[Feels Like]</span>
+                </div>
+                <div class="weather-condition">
+                    <span>Chance of Precipitation ☔️:</span>
+                    <span id="bestTrailPrecipitation">[Precipitation]</span>
+                </div>
+
+            </div>
+        </div>
+        <div class="footer">
+            <p class="unitsToggle">Units: °C. Click to Convert.</p>
+            <p>Enjoy your hike! 🌄</p>
+        </div>
+    </div>
+
+    <p class="tech-details" onclick="toggleTechDetails()">Technical Details</p>
+    <div class="tech-box" id="techBox">
+        <strong>For the techies:</strong>
+        <br/><br/>
+        This service functions by taking inputs from you and then translating them into a list of US coordinates.
+        From there, the backend receives those coordinates and a specified date and parses NWS grid point forecast to
+        determine the best location with a custom formula before returning it to the frontend to display. In my experience with back country
+        weather, the NWS provides the most accurate forecasts.
+        <br/><br/>
+        Tech Stack:
+        <ul>
+            <li>Frontend: HTML, CSS, JavaScript3</li>
+            <li>Backend: Java (Micronaut)</li>
+            <li>APIs: Google Maps Places (for coordinates), NWS API (for weather)</li>
+            <li>Hosting: AWS S3 Static for frontend. AWS Lambda for backend</li>
+            <li>Source Code: <a href="https://github.com/mountaincoder923/TrailWeatherScoutPublic" target="_blank">Github</a> Feedback or comments always
+            appreciated!</li>
+        </ul>
+        Like the background images? They were all taken by me. Some more here: <a href="https://www.instagram.com/alpinewanderer89/" target="_blank">Click!</a>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
