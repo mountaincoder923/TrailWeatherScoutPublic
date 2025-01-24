@@ -1,4 +1,4 @@
-TrailWeatherScout
+TrailWeatherScout / TrailWeatherScout.com
 
 ## Description
 As an avid hiker, I wanted a way to avoid having to compare weather across multiple spots to find the one with the best weather on the day I wanted to go hiking, so I created TrailWeatherScout and TrailWeatherScout.com 
