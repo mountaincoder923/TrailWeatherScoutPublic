@@ -1,41 +1,118 @@
-TrailWeatherScout / [TrailWeatherScout.com](https://trailweatherscout.com)
-
-## Description
-As an avid hiker, I wanted a way to avoid having to compare weather across multiple spots to find the one with the best weather on the day I wanted to go hiking, so I created TrailWeatherScout and TrailWeatherScout.com 
-
-TrailWeatherScout (TWS from hereon) is a tool that given a list of locations, can automatically fetch, parse and compare to return the location best weather conditons from the options you provided. 
-
-A high level overview of how it works: Forecaster contains a list of trailheads and weather conditions. Each trailhead contains its coordinates and a method to fetch and calculate conditions from the NWS.
-Forecaster can have each trailhead return the conditions of a provided day as a WeatherConditions object. Forecaster then compares the WeatherConditions and returns it as a JSON to the frontend. 
-
-TWSFrontend simply takes in your input, translates it into a set of coordinates and passes it to TWSBackend. 
-
-The TWSFrontend then renders the JSON from backend 
+## 🏔️ TrailWeatherScout ##
 
 
-## Features
--  Compares and produces local weather results. 
-- Typical 3 square Km locality. 
-- Can automatically compare up to 15 locations. (Local versions can be adjusted for more). 
+As an avid hiker, I wanted a way to avoid having to compare weather across multiple spots to find the spot with best weather, so I created TrailWeatherScout.
 
-## How to Use
-1. Clone the repository:
-2. Change CORS in WebConfig.java to allow whatever you're running your frontend on to connect to the backend if needed. Currently, WebcConfig.java allows Webstorm preview to connect. 
-3. Adjust API in script.js if needed. By default, its set the localhost:8080. 
-4. In script.js, insert your own API key for Google Maps Autocomplete. 
-
-## Requirements
-- Springboot 
-- JSON
-- Maven
-- Google Maps API Key
-
-## License
-This project is licensed under a custom license (see `LICENSE.txt`).  
-Summary:
-- You can use, modify, and learn from the code for personal or educational purposes.
-- **You cannot redistribute, commercialize, or deploy it on a public server**.
+TrailWeatherScout is a web app that helps you find the best  location based on live weather data. Instead of manually checking forecasts for multiple locations, let TrailWeatherScout automatically compare them and pick the best spot for your next outdoor adventure!
 
 
-## Disclaimer
-Trailweatherscout.com and TrailWeatherScout provides weather forecasts, but makes no promises of accuracy and takes no responsbility for decisions you make based off the data we provide. Always double check conditions and exercise caution. 
+🌐 Try It Here **[TrailWeatherScout.com](https://trailweatherscout.com)
+
+---
+
+**✨ Features**
+
+Automatically fetches & compares weather conditions for multiple locations  
+
+Uses National Weather Service (NWS) API for real-time accuracy up to 3 square km.
+
+Supports up to 15 locations at once (adjustable for local versions) 
+
+Google Maps integration for easy trailhead selection
+
+Insert manually by coordinates for any point within the United States down to 10m.
+
+---
+
+**🚀 How It Works**
+
+TrailWeatherScout consists of two main parts:
+
+1️⃣ Backend (Java + Spring Boot)
+
+Fetches weather conditions using NWS API
+
+Parses and compares weather data for multiple locations
+
+Returns the best location as JSON
+
+**Note**: While the backend in this repository is implemented using Spring Boot for local use, the actual deployed version runs as an AWS Lambda function for scalability.
+
+
+2️⃣ Frontend (JavaScript + Google Maps API)
+
+Lets users input trailheads 
+
+Converts locations into coordinates
+
+Performs validation 
+
+Calls the backend API and displays the results
+
+---
+
+**🛠️ Installation & Setup**
+
+1️⃣ Clone the Repository
+
+``` bash
+git clone https://github.com/mountaincoder923/TrailWeatherScoutPublic.git
+cd TrailWeatherScoutPublic
+```
+
+2️⃣ Backend Setup (Spring Boot)
+
+Update CORS settings in WebConfig.java if needed.
+
+Build and run the backend:
+
+cd TrailWeatherScoutBackend
+./mvnw spring-boot:run
+
+By default, the backend runs on localhost:8080.
+
+3️⃣ Frontend Setup
+
+Update the API URL in script.js if needed.
+
+Insert your own Google Maps API Key in script.js.
+
+Open index.html in a browser to start using TrailWeatherScout!
+
+---
+
+**📂 Project Structure**
+
+📦 TrailWeatherScoutPublic  
+├──  README.md | Project documentation  
+├── 📂 TrailWeatherScoutBackend   | Java Spring Boot Backend  
+├── 📂 TrailWeatherScoutFrontend  | HTML, JS, and UI components  
+└──  LICENSE.md         |  Licensing details
+
+---
+
+
+📋 Requirements
+
+💡 Spring Boot (Java Backend)
+
+💡Google Maps API Key (for trailhead selection)
+
+💡 Maven (for backend dependency management)
+
+---
+
+📚 License
+
+This project is licensed under a custom license (see LICENSE.md).Summary:
+
+You may use, modify, and learn from the code for personal or educational purposes.
+
+Redistribution, commercialization, or public deployment is not allowed.
+
+---
+
+**⚠️ Disclaimer**
+
+TrailWeatherScout provides weather forecasts, but accuracy is never guaranteed. Always double check conditions and exercise due caution before heading out!
+
