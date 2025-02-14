@@ -66,8 +66,10 @@ Update CORS settings in WebConfig.java if needed.
 
 Build and run the backend:
 
+```
 cd TrailWeatherScoutBackend
-./mvnw spring-boot:run
+./mvnw spring-boot:run 
+``` 
 
 By default, the backend runs on localhost:8080.
 
